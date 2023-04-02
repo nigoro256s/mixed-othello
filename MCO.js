@@ -13,7 +13,9 @@ window.onload = function () {
     const PieceRImgUrl = "PieceR.png";
     const PieceBImgUrl = "PieceB.png";
     const TTRImgUrl = "TTR.png";
-    game.preload(BoardImgUrl, MarkerImgUrl, ShadowImgUrl, PieceRImgUrl, PieceBImgUrl, TTRImgUrl);
+    const ScoreImgUrl = "Score.png";
+    game.preload(BoardImgUrl, MarkerImgUrl, ShadowImgUrl, PieceRImgUrl, PieceBImgUrl, TTRImgUrl, ScoreImgUrl);
+    game.preload("N0.png", "N1.png", "N2.png", "N3.png", "N4.png", "N5.png", "N6.png", "N7.png", "N8.png", "N9.png");
 
     game.onload = function () {
 
@@ -32,7 +34,6 @@ window.onload = function () {
         let LinelCol = new Array(8);
         let ClickCountX = 0;
         let ClickCountY = 0;
-        let ShowScore = false;
         let CountCount = 8;
 
         const mainScene = new Scene();
@@ -77,6 +78,15 @@ window.onload = function () {
         const TTRImg = new Sprite(1000, 1000);
         TTRImg.image = game.assets[TTRImgUrl];
 
+        const ScoreImg = new Sprite(1000, 100);
+        ScoreImg.image = game.assets[ScoreImgUrl];
+
+        let NowNums = new Array();
+        for (let i = 0; i <= 3; i++) {
+            NowNums.push(new Sprite(50, 100));
+            mainScene.addChild(NowNums[i]);
+        }
+
         let calcnum = 0;
 
         //Click
@@ -117,11 +127,16 @@ window.onload = function () {
                     Assist = true;
                 }
             }
-            else {
+            else if (ClickCountX < CountCount) {
                 ClickCountX = 0;
             }
             if (8 <= ClickY) {
                 ClickCountY++;
+                if (CountCount == ClickCountY) {
+                    mainScene.addChild(ScoreImg);
+                    ScoreImg.moveTo(0, 900);
+                    ScoreNum();
+                }
             }
             else if (ClickCountY < CountCount) {
                 ClickCountY = 0;
@@ -213,6 +228,9 @@ window.onload = function () {
                 State = 1;
                 Timer = 1;
                 TurnText.textContent = "相手思考中…";
+                if (CountCount <= ClickCountY) {
+                    ScoreNum();
+                }
             }
             else if (State == 4) {
                 TurnText.textContent = "あなたの番";
@@ -237,35 +255,16 @@ window.onload = function () {
                 }
                 PieceRImgs = new Array();
                 PieceBImgs = new Array();
-                ShowScore = false;
+                if (ClickCountY < CountCount) {
+                    mainScene.removeChild(ScoreImg);
+                }
+                ScoreNum();
                 State = 0;
             }
         };
 
         //Update
         game.onenterframe = function () {
-            //Score
-            if (CountCount <= ClickCountY || ShowScore) {
-                ScoreTextR.moveTo(100, 908);
-                ScoreTextB.moveTo(900 - ScoreTextB._boundWidth, 908);
-                let ScoreR = 0;
-                let ScoreB = 0;
-                for (let i = 0; i <= 63; i++) {
-                    if (0 <= BoardStates[i] && BoardStates[i] <= 0.5) {
-                        ScoreR++;
-                    }
-                    else if (0.5 <= BoardStates[i]) {
-                        ScoreB++;
-                    }
-                }
-                ScoreTextR.text = "Red(You) : " + ScoreR;
-                ScoreTextB.text = "Blue : " + ScoreB;
-            }
-            else {
-                ScoreTextR.text = "";
-                ScoreTextB.text = "";
-            }
-
             switch (State) {
                 case 1:
                     mainSurface.context.clearRect(0, 0, 1000, 1000);
@@ -330,6 +329,12 @@ window.onload = function () {
                             CulcMarkerPos(0);
                             if (CanPlaces.reduce(function (sum, element) { return sum + element; }, 0) == 0 || ScoreR * ScoreB == 0) {
                                 // -> End
+                                if (ClickCountY < CountCount) {
+                                    mainScene.addChild(ScoreImg);
+                                    ScoreImg.moveTo(0, 900);
+                                    console.log(ClickCountY);
+                                }
+                                ScoreNum();
                                 if (ScoreR == ScoreB) {
                                     TurnText.textContent = "引き分け";
                                 }
@@ -341,7 +346,6 @@ window.onload = function () {
                                 }
                                 State = 4;
                                 DrawPieces();
-                                ShowScore = true;
                                 mainScene.addChild(TTRImg);
                                 TTRImg.moveTo(900, 0);
                                 for (let i = 0; i <= PieceRImgs.length; i++) {
@@ -455,6 +459,9 @@ window.onload = function () {
                             mainScene.insertBefore(mainSprite, null);
                             State = 2;
                             Timer = 1;
+                            if (CountCount <= ClickCountY) {
+                                ScoreNum();
+                            }
                         }
                     }
                     Timer++;
@@ -521,6 +528,13 @@ window.onload = function () {
                             CulcMarkerPos(1);
                             if (CanPlaces.reduce(function (sum, element) { return sum + element; }, 0) == 0 || ScoreR * ScoreB == 0) {
                                 // -> End
+                                if (ClickCountY < CountCount) {
+                                    mainScene.addChild(ScoreImg);
+                                    ScoreImg.moveTo(0, 900);
+                                    mainScene.insertBefore(ScoreImg, NowNums[0]);
+                                    console.log(ClickCountY);
+                                }
+                                ScoreNum();
                                 if (ScoreR == ScoreB) {
                                     TurnText.textContent = "引き分け";
                                 }
@@ -532,7 +546,6 @@ window.onload = function () {
                                 }
                                 State = 4;
                                 DrawPieces();
-                                ShowScore = true;
                                 mainScene.addChild(TTRImg);
                                 TTRImg.moveTo(900, 0);
                                 for (let i = 0; i <= PieceRImgs.length; i++) {
@@ -638,6 +651,9 @@ window.onload = function () {
                                     }
                                 }
                                 Timer = 1;
+                                if (CountCount <= ClickCountY) {
+                                    ScoreNum();
+                                }
                             }
                         }
                         else {
@@ -821,7 +837,7 @@ window.onload = function () {
                     break;
                 case 4:
                     // [Predict 7]
-                    calcnum=0;
+                    calcnum = 0;
                     let MinVal4 = 999;
                     let MinPoses4 = new Array();
                     for (let i = 0; i <= 63; i++) {
@@ -840,7 +856,6 @@ window.onload = function () {
                         }
                     }
                     CPos = MinPoses4[Math.floor(Math.random() * MinPoses4.length)];
-                    console.log(calcnum);
                     break;
             }
             return CPos;
@@ -1092,6 +1107,30 @@ window.onload = function () {
                 }
                 return MinVal;
             }
+        }
+
+        function ScoreNum() {
+            let ScoreR = 0;
+            let ScoreB = 0;
+            for (let i = 0; i <= 63; i++) {
+                if (0 <= BoardStates[i] && BoardStates[i] <= 0.5) {
+                    ScoreR++;
+                }
+                else if (0.5 <= BoardStates[i]) {
+                    ScoreB++;
+                }
+            }
+            let Nums = [Math.floor(ScoreR / 10), ScoreR % 10, Math.floor(ScoreB / 10), ScoreB % 10];
+            for (let i = 0; i <= 3; i++) {
+                mainScene.removeChild(NowNums[i]);
+                NowNums[i].image = game.assets["N" + Nums[i] + ".png"];
+                mainScene.addChild(NowNums[i]);
+                mainScene.insertBefore(NowNums[i], null);
+            }
+            NowNums[0].moveTo(325, 900);
+            NowNums[1].moveTo(375, 900);
+            NowNums[2].moveTo(575, 900);
+            NowNums[3].moveTo(625, 900);
         }
     };
     game.start();

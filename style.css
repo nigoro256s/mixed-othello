@@ -109,12 +109,12 @@ h2::after {
 
 h2::before {
     left: 0;
-    background-color: rgb(255, 64, 32);
+    background-color: rgb(255, 64, 64);
 }
 
 h2::after {
     right: 0;
-    background-color: rgb(32, 64, 255);
+    background-color: rgb(64, 64, 255);
 }
 
 .bt {
@@ -122,7 +122,7 @@ h2::after {
     padding: 15px 0 15px 15px;
     border: solid;
     border-width: 0 0 2px 2px;
-    border-image: linear-gradient(to right, rgba(144, 64, 144, 1) 0%, rgba(144, 64, 144, 1) 75%, rgba(144, 64, 144, 0) 100%);
+    border-image: linear-gradient(to right, rgba(160, 64, 160, 1) 0%, rgba(160, 64, 160, 1) 75%, rgba(144, 64, 144, 0) 100%);
     border-image-slice: 1;
 }
 
