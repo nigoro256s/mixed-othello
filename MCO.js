@@ -1127,10 +1127,10 @@ window.onload = function () {
                 mainScene.addChild(NowNums[i]);
                 mainScene.insertBefore(NowNums[i], null);
             }
-            NowNums[0].moveTo(325, 900);
-            NowNums[1].moveTo(375, 900);
-            NowNums[2].moveTo(575, 900);
-            NowNums[3].moveTo(625, 900);
+            NowNums[0].moveTo(337.5, 900);
+            NowNums[1].moveTo(387.5, 900);
+            NowNums[2].moveTo(562.5, 900);
+            NowNums[3].moveTo(612.5, 900);
         }
     };
     game.start();
