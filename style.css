@@ -183,6 +183,10 @@ th {
 }
 
 @media screen and (max-width: 750px) {
+    .wrapper {
+        width: 750px;
+    }
+
     .main1 {
         margin-left: 30px;
     }
