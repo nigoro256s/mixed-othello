@@ -1,4 +1,4 @@
-body {
+html, body {
     background-color: rgb(255, 255, 255);
     color: rgb(64, 64, 64);
     font-family: 'Noto Serif JP', serif;
@@ -16,9 +16,9 @@ b {
 h1 {
     font-family: 'Noto Serif JP', serif;
     font-weight: 900;
-    font-size: 5em;
-    margin-top: 20px;
-    margin-bottom: 0;
+    font-size: 2.5em;
+    margin-top: 0;
+    margin-bottom: 10px;
 }
 
 .main1 {
