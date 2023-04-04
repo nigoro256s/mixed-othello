@@ -184,7 +184,7 @@ th {
 
 @media screen and (max-width: 750px) {
     .wrapper {
-        width: 750px;
+        width: 800px;
     }
 
     .main1 {
@@ -202,6 +202,6 @@ th {
     }
 
     .bottom {
-        width: 800px
+        width: 750px
     }
 }
